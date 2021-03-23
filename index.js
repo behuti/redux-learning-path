@@ -1,6 +1,10 @@
 const redux = require("redux");
-const createStore = redux.createStore;  //Redux method that creates an store
+const reduxLogger = require("redux-logger");
+
+const createStore = redux.createStore; //Redux method that creates an store
 const combineReducers = redux.combineReducers; //Redux method that combines multiple reducers
+const applyMiddleware = redux.applyMiddleware; //Redux method that allow us to apply a middleware
+const logger = reduxLogger.createLogger(); // Catch Redux actions + state, network request, clgs.
 
 // Actions
 
@@ -23,7 +27,6 @@ function buyIceCream() {
     };
 }
 
-
 //------------------------
 
 // initial states
@@ -33,7 +36,6 @@ const initialCakeState = {
 const initialIceCreamState = {
     numOfIceCreams: 20,
 };
-
 
 //-------------------------
 
@@ -74,12 +76,10 @@ const rootReducer = combineReducers({
 // Store
 // The createStore method acccept only one reducer that tells to the store how the state changes depending of the actions received.
 
-const store = createStore(rootReducer); //This method only accepts one reducer, that's why we need to combine de reducers.
+const store = createStore(rootReducer, applyMiddleware(logger)); //This method only accepts one reducer, that's why we need to combine de reducers. The second parameter is the middleware to log
 
 console.log("Initial State :", store.getState()); // Print the initial global state
-const unsubscribe = store.subscribe(() =>
-    console.log("updated state", store.getState())
-); //Subscribe a listener to know how the state is changing, ¿and unsubscribe at the same time?
+const unsubscribe = store.subscribe(() => {}); //Subscribe a listener to know how the state is changing, ¿and unsubscribe at the same time?
 
 store.dispatch(buyCake()); //Dispatch the actions
 store.dispatch(buyCake());
